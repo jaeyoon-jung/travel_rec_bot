@@ -9,11 +9,11 @@ Top 3 things to do in that city and 4 options on where to stay.
 
 Things to do places are input into Flickr and image is retrieved.
 
-Three different types of tweets are randomly generated.
+With regard to where to visit, three different types of tweets are randomly generated, but only one of them is chosen at random for the actual tweet.
 
 Due to the limitation in twitteR which does not allow the bot to tweet multiple images at once, 
 JetSetR tweets in series. 
-1st tweet is the suggestion on where to visit, along with visualization of the location on world map.
+1st tweet lists top 3 things to do in the area, along with visualization of the location on world map.
 2nd ~ 4th on tweets contain images of the three suggested destinations. 
 5th gives a suggestion on accomodation, chosen ramdomly from the 4 options generated earlier.
 
