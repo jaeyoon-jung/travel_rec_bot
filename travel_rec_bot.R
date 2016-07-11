@@ -1,3 +1,4 @@
+#!//usr/local/bin/Rscript
 # Required libraries
 library(twitteR)
 library(streamR)
@@ -63,7 +64,13 @@ imagelink3 <- paste("https://www.flickr.com/photos/tags/", visitlink3, sep = "")
 html1 <- imagelink1
 flickr1 <- read_html(html1)
 ##getting the href from the first link
-linkend1 <- flickr1 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
+#linkend1 <- flickr1 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
+flicklist1 <- flickr1 %>% html_nodes(css = "div.photo-list-photo-interaction > a")
+if (length(flicklist1) > 1)  {
+  linkend1 <- flicklist1[[2]] %>% html_attr("href")
+} else {
+  linkend1 <- flicklist1[[1]] %>% html_attr("href")
+  }
 newlink1 <- str_c("http://flickr.com", linkend1, collapse ="")
 photohtml1 <- read_html(newlink1)
 imagelink1 <- photohtml1 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
@@ -73,7 +80,13 @@ download.file(imagelink1, "1.jpg", mode = "wb")
 html2 <- imagelink2
 flickr2 <- read_html(html2)
 ##getting the href from the second link
-linkend2 <- flickr2 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
+#linkend2 <- flickr2 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
+flicklist2 <- flickr2 %>% html_nodes(css = "div.photo-list-photo-interaction > a")
+if (length(flicklist2) > 1)  {
+  linkend2 <- flicklist2[[2]] %>% html_attr("href")
+} else {
+  linkend2 <- flicklist2[[1]] %>% html_attr("href")
+}
 newlink2 <- str_c("http://flickr.com", linkend2, collapse ="")
 photohtml2 <- read_html(newlink2)
 imagelink2 <- photohtml2 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
@@ -83,7 +96,13 @@ download.file(imagelink2, "2.jpg", mode = "wb")
 html3 <- imagelink3
 flickr3 <- read_html(html3)
 ##getting the href from the third link
-linkend3 <- flickr3 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
+#linkend3 <- flickr3 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
+flicklist3 <- flickr3 %>% html_nodes(css = "div.photo-list-photo-interaction > a")
+if (length(flicklist3) > 1)  {
+  linkend3 <- flicklist3[[2]] %>% html_attr("href")
+} else {
+  linkend3 <- flicklist3[[1]] %>% html_attr("href")
+}
 newlink3 <- str_c("http://flickr.com", linkend3, collapse ="")
 photohtml3 <- read_html(newlink3)
 imagelink3 <- photohtml3 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
