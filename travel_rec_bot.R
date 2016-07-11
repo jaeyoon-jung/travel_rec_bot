@@ -77,7 +77,7 @@ if (length(flicklist1) > 0) {
   imagelink1 <- photohtml1 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
   imagelink1 <- str_c("http:", imagelink1, collapse="")
   download.file(imagelink1, "1.jpg", mode = "wb")
-} else linkend <- NA
+} else linkend1 <- NA
 
 html2 <- imagelink2
 flickr2 <- read_html(html2)
