@@ -1,4 +1,4 @@
-#!//usr/local/bin/Rscript
+#!/usr/local/bin/Rscript
 # Required libraries
 library(twitteR)
 library(streamR)
@@ -8,8 +8,9 @@ library(rvest)
 library(stringr)
 library(RSQLite)
 
+dir = getwd()
 #reads city dataset
-topcities <- read.csv("100 Top Cities.csv")
+topcities <- read.csv(paste(dir, "/", "100 Top Cities.csv", sep = ""))
 #picks a random city
 location <- sample(topcities[,1], 1, replace = FALSE)
 location <- as.character(location) #city name
@@ -64,50 +65,53 @@ imagelink3 <- paste("https://www.flickr.com/photos/tags/", visitlink3, sep = "")
 html1 <- imagelink1
 flickr1 <- read_html(html1)
 ##getting the href from the first link
-#linkend1 <- flickr1 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
 flicklist1 <- flickr1 %>% html_nodes(css = "div.photo-list-photo-interaction > a")
-if (length(flicklist1) > 1)  {
-  linkend1 <- flicklist1[[2]] %>% html_attr("href")
-} else {
-  linkend1 <- flicklist1[[1]] %>% html_attr("href")
-  }
-newlink1 <- str_c("http://flickr.com", linkend1, collapse ="")
-photohtml1 <- read_html(newlink1)
-imagelink1 <- photohtml1 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
-imagelink1 <- str_c("http:", imagelink1, collapse="")
-download.file(imagelink1, "1.jpg", mode = "wb")
+if (length(flicklist1) > 0) {
+  if (length(flicklist1) > 1)  {
+    linkend1 <- flicklist1[[2]] %>% html_attr("href")
+  } else {
+    linkend1 <- flicklist1[[1]] %>% html_attr("href")
+  } 
+  newlink1 <- str_c("http://flickr.com", linkend1, collapse ="")
+  photohtml1 <- read_html(newlink1)
+  imagelink1 <- photohtml1 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
+  imagelink1 <- str_c("http:", imagelink1, collapse="")
+  download.file(imagelink1, "1.jpg", mode = "wb")
+} else linkend <- NA
 
 html2 <- imagelink2
 flickr2 <- read_html(html2)
 ##getting the href from the second link
-#linkend2 <- flickr2 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
 flicklist2 <- flickr2 %>% html_nodes(css = "div.photo-list-photo-interaction > a")
-if (length(flicklist2) > 1)  {
-  linkend2 <- flicklist2[[2]] %>% html_attr("href")
-} else {
-  linkend2 <- flicklist2[[1]] %>% html_attr("href")
-}
-newlink2 <- str_c("http://flickr.com", linkend2, collapse ="")
-photohtml2 <- read_html(newlink2)
-imagelink2 <- photohtml2 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
-imagelink2 <- str_c("http:", imagelink2, collapse="")
-download.file(imagelink2, "2.jpg", mode = "wb")
+if (length(flicklist2) >0 ) {
+  if (length(flicklist2) > 1)  {
+    linkend2 <- flicklist2[[2]] %>% html_attr("href")
+  } else {
+    linkend2 <- flicklist2[[1]] %>% html_attr("href")
+  } 
+  newlink2 <- str_c("http://flickr.com", linkend2, collapse ="")
+  photohtml2 <- read_html(newlink2)
+  imagelink2 <- photohtml2 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
+  imagelink2 <- str_c("http:", imagelink2, collapse="")
+  download.file(imagelink2, "2.jpg", mode = "wb")
+} else linkend2 <- NA
 
 html3 <- imagelink3
 flickr3 <- read_html(html3)
 ##getting the href from the third link
-#linkend3 <- flickr3 %>% html_nodes(css = "div.photo-list-photo-interaction > a") %>% .[[2]] %>% html_attr("href")
 flicklist3 <- flickr3 %>% html_nodes(css = "div.photo-list-photo-interaction > a")
-if (length(flicklist3) > 1)  {
-  linkend3 <- flicklist3[[2]] %>% html_attr("href")
-} else {
-  linkend3 <- flicklist3[[1]] %>% html_attr("href")
-}
-newlink3 <- str_c("http://flickr.com", linkend3, collapse ="")
-photohtml3 <- read_html(newlink3)
-imagelink3 <- photohtml3 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
-imagelink3 <- str_c("http:", imagelink3, collapse="")
-download.file(imagelink3, "3.jpg", mode = "wb")
+if (length(flicklist3) > 0) {
+  if (length(flicklist3) > 1)  {
+    linkend3 <- flicklist3[[2]] %>% html_attr("href")
+  } else {
+    linkend3 <- flicklist3[[1]] %>% html_attr("href")
+  }
+  newlink3 <- str_c("http://flickr.com", linkend3, collapse ="")
+  photohtml3 <- read_html(newlink3)
+  imagelink3 <- photohtml3 %>% html_nodes("img")  %>% .[[2]] %>% html_attr("src")
+  imagelink3 <- str_c("http:", imagelink3, collapse="")
+  download.file(imagelink3, "3.jpg", mode = "wb")
+} else linkend3 <- NA
 
 #Twitterbot- authentiation
 consumer_key = "x3XSvMHzMHt2qG9ZJwoHcGlwZ"
@@ -149,10 +153,16 @@ ggplot() + borders(database = "world") +
 ggsave("map.png")
 
 #tweet recommendations for places to visit and stay
-tweet(text = visittweet, mediaPath = "/Users/jaeyoon/Desktop/Data Science/project2/HotelBot/map.png", bypassCharLimit = TRUE)
-tweet(text = visit1, mediaPath = "/Users/jaeyoon/Desktop/Data Science/project2/HotelBot/1.jpg", bypassCharLimit = TRUE)
-tweet(text = visit2, mediaPath = "/Users/jaeyoon/Desktop/Data Science/project2/HotelBot/2.jpg", bypassCharLimit = TRUE)
-tweet(text = visit3, mediaPath = "/Users/jaeyoon/Desktop/Data Science/project2/HotelBot/3.jpg", bypassCharLimit = TRUE)
+tweet(text = visittweet, mediaPath = paste(dir, "/", "map.png", sep = ""), bypassCharLimit = TRUE)
+if(!is.na(linkend1)) {
+  tweet(text = visit1, mediaPath = paste(dir, "/", "1.jpg", sep =""), bypassCharLimit = TRUE)
+  }
+if(!is.na(linkend2)) {
+  tweet(text = visit2, mediaPath = paste(dir, "/", "2.jpg", sep =""), bypassCharLimit = TRUE)
+}
+if(!is.na(linkend3)) {
+  tweet(text = visit3, mediaPath = paste(dir, "/", "3.jpg", sep =""), bypassCharLimit = TRUE)
+}
 tweet(hoteltweet)
 #remove image files so that they won't fill up memory
 file.remove(c("map.png", "1.jpg", "2.jpg", "3.jpg"))
